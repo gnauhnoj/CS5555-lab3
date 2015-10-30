@@ -5,6 +5,7 @@ This directory assumes the following:
 * a config file which provide the following:
   - filemap - a dictionary mapping from fitbit datatype to file data/ filename (.json)
   - dataloader - a dictionary mapping from various required fields in data.py to their corresponding requirements. For example:
+
     ```
       {
           'host': localhost for ohmage shimmer,
