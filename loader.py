@@ -1,11 +1,17 @@
 import csv
 import json
 import logging
+import datetime
 from collections import defaultdict
 from config import filemap
 __author__ = 'jhh283'
 
 logging.basicConfig(filename='loader.log', level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+
+def convert_dt(dt_str):
+    dt = datetime.datetime.strptime(dt_str, '%Y-%m-%d')
+    return dt
 
 
 class Stats(object):
@@ -15,7 +21,7 @@ class Stats(object):
         self.steps = {}
         self.weight = {}
         self.sleep = {}
-        self.happiness = {}
+        self.feelings = {}
         # need map for getitem...
         self.map = {
             'date': self.date,
@@ -23,7 +29,7 @@ class Stats(object):
             'steps': self.steps,
             'weight': self.weight,
             'sleep': self.sleep,
-            'happiness': self.happiness
+            'feelings': self.feelings
         }
 
     def __getitem__(self, key):
@@ -44,8 +50,8 @@ def load_feelings(filename, rows):
                 check_len = len(row)
             elif check_len == len(row):
                 date = row[0]
-                rows[date].date = date
-                rows[date].happiness = int(row[1])
+                rows[date].date = convert_dt(date)
+                rows[date].feelings = int(row[1])
             else:
                 logging.exception("length check failed: " + str(row))
     logging.info("number of rows: " + str(len(rows)))
@@ -66,7 +72,7 @@ def load_json(filename, rows, label):
                 datum = datum['content']
             for key in datum:
                 if rows[date].date is None:
-                    rows[date].date = date
+                    rows[date].date = convert_dt(date)
                 rows[date][label][key] = datum[key]
 
 
