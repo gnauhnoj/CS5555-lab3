@@ -27,9 +27,13 @@ def plt_plot_date(x, y, xlabel, ylabel, title, filename):
     plt.close()
 
 
-def sort_time(x, y):
+def sort_time(x, y, y_next=None):
     npa = np.array(zip(x, y))
+    if y_next is not None:
+        npa = np.column_stack([npa, y_next])
     npa = npa[npa[:, 0].argsort()]
+    if y_next is not None:
+        return npa[:, 0], npa[:, 1], npa[:, 2]
     return npa[:, 0], npa[:, 1]
 
 
@@ -41,7 +45,7 @@ def plot_feelings(dataset):
     ylab = 'Personal Feeling Score (1-5)'
     title = 'Subjective Feeling Score'
     fn = 'feelings.png'
-    plt_plot_date(x, y, xlab, ylab, title, fn)
+    # plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
@@ -53,7 +57,7 @@ def plot_weight(dataset):
     ylab = 'Weight (kg)'
     title = 'Weight'
     fn = 'weight.png'
-    plt_plot_date(x, y, xlab, ylab, title, fn)
+    # plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
@@ -66,7 +70,7 @@ def plot_sleep(dataset):
     ylab = 'Total Minutes Asleep (min)'
     title = 'Total Time Asleep'
     fn = 'sleep.png'
-    plt_plot_date(x, y, xlab, ylab, title, fn)
+    # plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
@@ -74,16 +78,15 @@ def plot_activity(dataset):
     x = [dataset[key].date for key in dataset if dataset[key].activity['summary']['steps'] > 0]
     y_steps = [dataset[key].activity['summary']['steps'] for key in dataset if dataset[key].activity['summary']['steps'] > 0]
     y_sed_act = [dataset[key].activity['summary']['sedentaryMinutes'] for key in dataset if dataset[key].activity['summary']['steps'] > 0]
-    x, y_steps = sort_time(x, y_steps)
-    x, y_sed_act = sort_time(x, y_sed_act)
+    x, y_steps, y_sed_act = sort_time(x, y_steps, y_sed_act)
     xlab = 'Date'
     ylab = 'Step Count (steps)'
     title = 'Steps Taken'
     fn = 'steps.png'
-    plt_plot_date(x, y_steps, xlab, ylab, title, fn)
+    # plt_plot_date(x, y_steps, xlab, ylab, title, fn)
     xlab = 'Date'
     ylab = 'Sedentary Time (minutes)'
     title = 'Sedentary Time'
     fn = 'activity.png'
-    plt_plot_date(x, y_sed_act, xlab, ylab, title, fn)
+    # plt_plot_date(x, y_sed_act, xlab, ylab, title, fn)
     return [x, y_steps, y_sed_act]
