@@ -4,7 +4,11 @@ from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 __author__ = 'jhh283'
 
+# set of functions to parse our Stats data structure and to plot time series for each
+# data stream we are interested in
 
+
+# general plotting utility function
 def plt_plot_date(x, y, xlabel, ylabel, title, filename):
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -27,6 +31,7 @@ def plt_plot_date(x, y, xlabel, ylabel, title, filename):
     plt.close()
 
 
+# sorts np arrays according to the provided time stamp
 def sort_time(x, y, y_next=None):
     npa = np.array(zip(x, y))
     if y_next is not None:
@@ -37,6 +42,7 @@ def sort_time(x, y, y_next=None):
     return npa[:, 0], npa[:, 1]
 
 
+# plots user-provided feeling survey response
 def plot_feelings(dataset):
     x = [dataset[key].date for key in dataset if dataset[key].feelings is not None]
     y = [dataset[key].feelings for key in dataset if dataset[key].feelings is not None]
@@ -45,10 +51,11 @@ def plot_feelings(dataset):
     ylab = 'Personal Feeling Score (1-5)'
     title = 'Subjective Feeling Score'
     fn = 'feelings.png'
-    # plt_plot_date(x, y, xlab, ylab, title, fn)
+    plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
+# plots weight as retrieved from the fitbit api
 def plot_weight(dataset):
     x = [dataset[key].date for key in dataset if dataset[key].weight != {}]
     y = [dataset[key].weight['weight'] for key in dataset if dataset[key].weight != {}]
@@ -57,10 +64,11 @@ def plot_weight(dataset):
     ylab = 'Weight (kg)'
     title = 'Weight'
     fn = 'weight.png'
-    # plt_plot_date(x, y, xlab, ylab, title, fn)
+    plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
+# plots sleep as retrieved from the fitbit api
 def plot_sleep(dataset):
     x = [dataset[key].date for key in dataset if dataset[key].sleep['summary']['totalSleepRecords'] > 0]
     y = [dataset[key].sleep['summary']['totalMinutesAsleep'] for key in dataset if dataset[key].sleep['summary']['totalSleepRecords'] > 0]
@@ -70,10 +78,11 @@ def plot_sleep(dataset):
     ylab = 'Total Minutes Asleep (min)'
     title = 'Total Time Asleep'
     fn = 'sleep.png'
-    # plt_plot_date(x, y, xlab, ylab, title, fn)
+    plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
+# plots step count and sedentary time as retrieved from the fitbit api
 def plot_activity(dataset):
     x = [dataset[key].date for key in dataset if dataset[key].activity['summary']['steps'] > 0]
     y_steps = [dataset[key].activity['summary']['steps'] for key in dataset if dataset[key].activity['summary']['steps'] > 0]
@@ -83,10 +92,10 @@ def plot_activity(dataset):
     ylab = 'Step Count (steps)'
     title = 'Steps Taken'
     fn = 'steps.png'
-    # plt_plot_date(x, y_steps, xlab, ylab, title, fn)
+    plt_plot_date(x, y_steps, xlab, ylab, title, fn)
     xlab = 'Date'
     ylab = 'Sedentary Time (minutes)'
     title = 'Sedentary Time'
     fn = 'activity.png'
-    # plt_plot_date(x, y_sed_act, xlab, ylab, title, fn)
+    plt_plot_date(x, y_sed_act, xlab, ylab, title, fn)
     return [x, y_steps, y_sed_act]

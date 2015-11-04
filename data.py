@@ -6,6 +6,7 @@ from config import dataloader
 # this code assumes that docker instance of mhealth shimmer is running
 # assumes fitbit credentials have been set up
 # also assumes that the user specified below has authorized
+# pulls in fitbit data and saves into json files in the /data directory
 host = dataloader['host']
 username = dataloader['username']
 shim = dataloader['shim']

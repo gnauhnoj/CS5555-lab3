@@ -6,6 +6,8 @@ from collections import defaultdict
 from config import filemap
 __author__ = 'jhh283'
 
+# script that loads data from files into a class structure called Stats
+
 logging.basicConfig(filename='loader.log', level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
