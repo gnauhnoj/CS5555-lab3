@@ -51,7 +51,7 @@ def plot_feelings(dataset):
     ylab = 'Personal Feeling Score (1-5)'
     title = 'Subjective Feeling Score'
     fn = 'feelings.png'
-    # plt_plot_date(x, y, xlab, ylab, title, fn)
+    plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
@@ -64,7 +64,7 @@ def plot_weight(dataset):
     ylab = 'Weight (kg)'
     title = 'Weight'
     fn = 'weight.png'
-    # plt_plot_date(x, y, xlab, ylab, title, fn)
+    plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
@@ -78,7 +78,7 @@ def plot_sleep(dataset):
     ylab = 'Total Minutes Asleep (min)'
     title = 'Total Time Asleep'
     fn = 'sleep.png'
-    # plt_plot_date(x, y, xlab, ylab, title, fn)
+    plt_plot_date(x, y, xlab, ylab, title, fn)
     return [x, y]
 
 
@@ -92,10 +92,10 @@ def plot_activity(dataset):
     ylab = 'Step Count (steps)'
     title = 'Steps Taken'
     fn = 'steps.png'
-    # plt_plot_date(x, y_steps, xlab, ylab, title, fn)
+    plt_plot_date(x, y_steps, xlab, ylab, title, fn)
     xlab = 'Date'
     ylab = 'Sedentary Time (minutes)'
     title = 'Sedentary Time'
     fn = 'activity.png'
-    # plt_plot_date(x, y_sed_act, xlab, ylab, title, fn)
+    plt_plot_date(x, y_sed_act, xlab, ylab, title, fn)
     return [x, y_steps, y_sed_act]

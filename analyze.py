@@ -14,7 +14,7 @@ FEELING_THRESH = 3
 # percent change in weight
 WEIGHT_THRESH = 0.05
 # sleep is in minutes
-SLEEP_TOO_MUCH = 8*60
+SLEEP_TOO_MUCH = 10*60
 SLEEP_TOO_LITTLE = 6*60
 # step thresholds
 INACTIVE_STEPS = 3000
