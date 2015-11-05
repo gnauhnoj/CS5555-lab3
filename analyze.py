@@ -80,11 +80,11 @@ def verify_depressed_feelings(mtx_col):
 
 # check weight for fluctuations of >5%
 def test_weight_change(mtx_col):
-    mtx_col = mtx_col.tolist()
+    new_col = mtx_col.tolist()
     min_weight = sys.maxint
     max_weight = -sys.maxint - 1
     state = False
-    for weight in mtx_col:
+    for weight in new_col:
         if weight is None:
             continue
         if weight < min_weight:
@@ -101,13 +101,13 @@ def test_weight_change(mtx_col):
 # greater than a provided high and lower than provided low
 # make up a proportion greater than config variable
 def test_range(mtx_col, low, high):
-    mtx_col = mtx_col.tolist()
-    mtx_col = [i for i in mtx_col if i is not None]
-    total_days = len(mtx_col)
-    low_cat = len([j for j in mtx_col if j < low])
-    high_cat = len([j for j in mtx_col if j > high])
+    new_col = mtx_col.tolist()
+    new_col = [i for i in new_col if i is not None]
+    total_days = len(new_col)
+    low_cat = len([j for j in new_col if j < low])
+    high_cat = len([j for j in new_col if j > high])
     test_bool = ((low_cat + high_cat) / total_days) > ALMOST_EVERY
-    return mtx_col, test_bool
+    return new_col, test_bool
 
 
 # function which tests to see if number of days that are significantly different
@@ -123,10 +123,10 @@ def test_variation(mtx_col):
 # check if you're sleeping too much or too little
 # also check to see if your sleep is varying significantly every day
 def test_sleep_amount(mtx_col):
-    mtx_col, sleep_habits = test_range(mtx_col, SLEEP_TOO_LITTLE, SLEEP_TOO_MUCH)
-    total_days = len(mtx_col)
+    new_col, sleep_habits = test_range(mtx_col, SLEEP_TOO_LITTLE, SLEEP_TOO_MUCH)
+    total_days = len(new_col)
 
-    sleep_flux = test_variation(mtx_col)
+    sleep_flux = test_variation(new_col)
     return sleep_habits or sleep_flux
 
 
@@ -166,6 +166,41 @@ def check_flux(mtx_col):
     mean = np.mean(mtx_col)
     return (np.absolute(mtx_col - mean) > 2*std)
 
+
+# checks to see if a entry is provided a proportion of days higher than configured 'ALMOST_EVERY'
+def def_check_freq(mtx_col):
+    new_col = mtx_col.tolist()
+    total = len(new_col)
+    new_col = [i for i in new_col if i is not None]
+    record = len(new_col)
+    return (record/total) > ALMOST_EVERY
+
+
+# checks to make sure that a non-None record is recorded once in ever 7 indices
+def def_check_weekly(mtx_col):
+    new_col = mtx_col.tolist()
+    last = -1
+    out = True
+    for i, c in enumerate(new_col):
+        if c is not None:
+            last = i
+        if (i - last) >= 7:
+            out = False
+    return out
+
+
+# check participant study adherence
+# for weight -- measurement is provided once per 7 days in the interested period
+# everything else -- measurement is provided 'almost every' day
+def check_adherance(mtx):
+    result = True
+    result = result and def_check_freq(mtx[:, 0])
+    result = result and def_check_weekly(mtx[:, 1])
+    result = result and def_check_freq(mtx[:, 2])
+    result = result and def_check_freq(mtx[:, 3])
+    result = result and def_check_freq(mtx[:, 4])
+    return result
+
 if __name__ == '__main__':
     reload(loader)
     dataset = loader.load_files()
@@ -178,4 +213,5 @@ if __name__ == '__main__':
     feats = [feelings, weight, sleep, activity]
     vec = build_vec(feats)
     print vec
+    print 'Patient Adherance', check_adherance(vec)
     print 'Mild Depression Identified?', verify_mild_depression_sev(vec)
