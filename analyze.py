@@ -149,13 +149,14 @@ def test_activity_amount(step_col, sedentary_col):
 
 
 # this assumes matrix input is structured as -- [feelings, weight, sleep, activity]
-def verify_depression_sev(mtx):
+def verify_mild_depression_sev(mtx):
     imp, fill_vec = fill_gaps(mtx)
     feeling_cond = verify_depressed_feelings(fill_vec[:, 0])
     weight_cond = test_weight_change(mtx[:, 1])
     sleep_cond = test_sleep_amount(mtx[:, 2])
     act_cond = test_activity_amount(mtx[:, 3], mtx[:, 4])
-    cond = feeling_cond and weight_cond and sleep_cond and act_cond
+    # mild depression if all four conditions return false
+    cond = not (feeling_cond or weight_cond or sleep_cond or act_cond)
     return cond
 
 
@@ -177,4 +178,4 @@ if __name__ == '__main__':
     feats = [feelings, weight, sleep, activity]
     vec = build_vec(feats)
     print vec
-    print 'Severe or Moderate Depression Identified?', verify_depression_sev(vec)
+    print 'Mild Depression Identified?', verify_mild_depression_sev(vec)
